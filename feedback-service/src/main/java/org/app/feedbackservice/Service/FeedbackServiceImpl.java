@@ -52,4 +52,22 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         return responseList;
     }
+
+    @Override
+    public FeedbackResponseDTO createFeedbackUID(Long id, FeedbackRequestDTO request) {
+        Feedback feedback = new Feedback();
+        feedback.setUserId(id);
+        feedback.setComment(request.getComment());
+        feedback.setRating(request.getRating());
+
+        Feedback saved = feedbackRepository.save(feedback);
+
+        FeedbackResponseDTO response = new FeedbackResponseDTO();
+        response.setId(saved.getId());
+        response.setUserId(saved.getUserId());
+        response.setComment(saved.getComment());
+        response.setRating(saved.getRating());
+
+        return response;
+    }
 }

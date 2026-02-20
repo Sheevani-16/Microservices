@@ -15,5 +15,5 @@ public class UserResponseDTO {
     private Long id;
     private String name;
     private String email;
-    private List<FeedbackResponseDTO> feedbacks = new ArrayList<>();
+    private FeedbackResponseDTO feedbacks;
 }

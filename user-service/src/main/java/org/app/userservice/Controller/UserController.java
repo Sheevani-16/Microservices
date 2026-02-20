@@ -23,6 +23,11 @@ public class UserController {
         return userServiceImpl.createUser(request);
     }
 
+    @PostMapping("/createUF")
+    public UserResponseDTO createUserFB(@RequestBody UserRequestDTO request) {
+        return userServiceImpl.createfeedback(request);
+    }
+
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
         return userServiceImpl.getAllUsers();

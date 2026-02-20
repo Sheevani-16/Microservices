@@ -10,6 +10,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RestTemplateUtils restTemplateUtils;
+    private final RestTemplate restTemplate;
 
-    public UserServiceImpl(UserRepository userRepository, RestTemplateUtils restTemplateUtils) {
+    public UserServiceImpl(UserRepository userRepository, RestTemplateUtils restTemplateUtils, RestTemplate restTemplate) {
         this.userRepository = userRepository;
         this.restTemplateUtils = restTemplateUtils;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         User saved = userRepository.save(user);
+
 
         UserResponseDTO response = new UserResponseDTO();
         response.setId(saved.getId());
@@ -81,15 +85,37 @@ public class UserServiceImpl implements UserService {
             );
 
             List<FeedbackResponseDTO> feedbacks = response.getBody();
-            dto.setFeedbacks(feedbacks != null ? feedbacks : new ArrayList<>());
+//            dto.setFeedbacks(feedbacks != null ? feedbacks : new ArrayList<>());
 
         } catch (Exception e) {
-            dto.setFeedbacks(new ArrayList<>());
+//            dto.setFeedbacks(new ArrayList<>());
         }
 
         return dto;
     }
+
+    @Override
+    public UserResponseDTO createfeedback(UserRequestDTO request) {
+
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        User saved = userRepository.save(user);
+
+        String url = "http://feedback-service:8082/feedbacks/" + saved.getId();
+        FeedbackResponseDTO fDTO = restTemplate.postForObject(url,request.getFeedbacks(), FeedbackResponseDTO.class);
+
+
+        UserResponseDTO response = new UserResponseDTO();
+        response.setId(saved.getId());
+        response.setName(saved.getName());
+        response.setEmail(saved.getEmail());
+        response.setFeedbacks(fDTO);
+        return response;
     }
+}
 
 //    @Override
 //    public List<UserResponseDTO> getAllFeedbackByUserID(long id) {

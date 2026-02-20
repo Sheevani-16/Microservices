@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface UserService {
     UserResponseDTO createUser(UserRequestDTO request);
-
     List<UserResponseDTO> getAllUsers();
     UserResponseDTO getAllFeedbackByUserID(long id);
+    UserResponseDTO createfeedback(UserRequestDTO request);
 }
 

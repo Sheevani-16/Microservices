@@ -22,6 +22,11 @@ import java.util.List;
             return feedbackService.createFeedback(request);
         }
 
+        @PostMapping("/{userId}")
+        public FeedbackResponseDTO createFeedbackByUserid(@PathVariable Long userId, @RequestBody FeedbackRequestDTO request) {
+            return feedbackService.createFeedbackUID(userId,request);
+        }
+
         @GetMapping("/user/{userId}")
         public List<FeedbackResponseDTO> getFeedbackByUser(@PathVariable Long userId) {
             return feedbackService.getFeedbackByUser(userId);
